@@ -57,7 +57,7 @@ router.put("/updatenotes/:id", fetchuser, async (req, res) => {
         return res.status(401).send("Not Allowed")
     }
     note = await Note.findByIdAndUpdate(req.params.id, { $set : newNote }, { new: true })
-    res.json({ note })
+    res.json({ "Succes":"Note Updated",note })
 })
 // ROUTE 4: Delete the Notes using DELETE "/api/notes/updatenotes/". No login Required
 router.delete("/deletenotes/:id", fetchuser, async (req, res) => {
