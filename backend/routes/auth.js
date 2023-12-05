@@ -15,13 +15,15 @@ router.post("/createuser", [
     // If there are errors return bad request and the errors
     const result = validationResult(req);
     if (!result.isEmpty()) {
-        return res.json({ errors: result.array() });
+        success=false;
+        return res.json({success,errors: result.array() });
     }
     // Check wheather the user with this email exists already
     try {
         let user = await User.findOne({ email: req.body.email })
         if (user) {
-            return res.status(400).json({ error: "Error hai bhaii email ke sath dusri dalo bhaii" })
+            success=false;
+            return res.status(400).json({ success,error: "Email already exits try with another" })
         }
         const JWT_SSH = "HelloNeerabhaikaiseho"
         const salt = await bcrypt.genSalt(10);
@@ -37,7 +39,8 @@ router.post("/createuser", [
             }
         }
         const authToken = jwt.sign(data, JWT_SSH);
-        res.json({ authToken })
+        success=true;
+        res.json({success,authToken })
         // res.json(user)
     } catch (error) {
         console.log(error)
@@ -59,11 +62,13 @@ router.post("/login", [
     try {
         let user = await User.findOne({ email })
         if (!user) {
-            return res.status(400).json({ error: "Please try with correct credentials" })
+            success=false;
+            return res.status(400).json({ success,error: "Please try with correct credentials" })
         }
         const comparePassword = await bcrypt.compare(password, user.password)
         if (!comparePassword) {
-            return res.status(400).json({ error: "Please try with correct credentials" })
+            success=false;
+            return res.status(400).json({ success,error: "Please try with correct credentials" })
         }
         const data = {
             user: {
@@ -71,7 +76,8 @@ router.post("/login", [
             }
         }
         const authToken = jwt.sign(data, JWT_SSH);
-        res.json({ authToken })
+        success=true;
+        res.json({success, authToken })
     } catch (error) {
         console.log(error)
         res.status(500).json({ Error: "Bhut badi error aa gayi hai bhaii Internal server error" })

@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import Noteitem from './Noteitem';
 import Addnotes from './Addnotes';
 
-const Notes = () => {
+const Notes = (props) => {
   const [note, setNote] = useState({ id: "", etitle: "", edescription: "", etag: "default" })
   const context = useContext(noteContext);
   const { notes, getNote, editNote } = context;
@@ -27,13 +27,14 @@ const Notes = () => {
     // console.log("Updating Noteitem.apply........", note)
     editNote(note.id, note.etitle, note.edescription, note.etag)
     ref.current.click();
+    props.setAlert("Updated your note","success")
   }
   const onchange = (e) => {
     setNote({ ...note, [e.target.name]: e.target.value });
   }
   return (
     <>
-      <Addnotes />
+      <Addnotes setAlert={props.setAlert} />
       <button type="button" ref={ref} className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
         Launch demo modal
       </button>
@@ -71,7 +72,7 @@ const Notes = () => {
       <div className="conatiner mx-3">
       {notes.length===0 && "No Notes to Display"} </div>
         {notes.map((note) => {
-          return <Noteitem updateNotes={updateNotes} key={note._id} note={note} />
+          return <Noteitem updateNotes={updateNotes} key={note._id} note={note} setAlert={props.setAlert} />
         })}
        
       </div>
