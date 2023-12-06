@@ -18,7 +18,7 @@ const Signup = (props) => {
     if (json.success) {
       // save the authtoken and redirect
       localStorage.setItem("token", json.authToken)
-      navigate("/")
+      navigate("/home")
       props.setAlert("Signup Succesfully","success")
     }else{
       props.setAlert("Email already exists try with another","danger")
@@ -29,6 +29,7 @@ const Signup = (props) => {
   }
   return (
     <div className='container'>
+      <h2>Create an acount to use iNoteBook</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">Name</label>
